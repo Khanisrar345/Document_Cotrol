@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= page.replace(/_/g, ' ').charAt(0).toUpperCase() + page.replace(/_/g, ' ').slice(1) %> - DCS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --sidebar-bg: #1B1C31;
+      --sidebar-hover: #1a7a7a;
+      --accent: #1a7a7a;
+      --accent2: #23a6a6;
+      --bg-color: #F4F7FE;
+      --text-main: #1a2332;
+      --text-muted: #9ca3af;
+      --card-radius: 16px;
+    }
+
+    * {
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background-color: var(--sidebar-bg);
+      padding: 24px;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      color: white;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #0d5f5f, #23a6a6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+
+    .brand-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: #7B8BAF;
+      margin-top: -4px;
+    }
+
+    .nav-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: #7B8BAF;
+      text-transform: uppercase;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-link {
+      color: #A3AED0;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      background-color: var(--sidebar-hover);
+      color: white;
+    }
+
+    .nav-link.active {
+      background-color: var(--sidebar-hover);
+      color: white;
+    }
+
+    .nav-link i {
+      width: 18px;
+      text-align: center;
+    }
+
+    .credit-text {
+      font-size: 10px;
+      color: #7B8BAF;
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .logout-link {
+      color: #FF6B6B;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+
+    .logout-link:hover {
+      background-color: rgba(255, 107, 107, 0.1);
+      color: #FF6B6B;
+    }
+
+    .main-content {
+      margin-left: 280px;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    .top-navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 16px 24px;
+      border-radius: var(--card-radius);
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .navbar-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-transform: capitalize;
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-bar {
+      background-color: #F8FAFC;
+      border: 1px solid #E0E7FF;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      min-width: 200px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .icon-btn:hover {
+      color: var(--text-main);
+    }
+
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .profile-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
+
+    .profile-info {
+      text-align: left;
+    }
+
+    .profile-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .profile-role {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: capitalize;
+    }
+
+    .card {
+      border: none;
+      border-radius: var(--card-radius);
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      background: white;
+    }
+
+    .kpi-card {
+      padding: 20px;
+      border-radius: var(--card-radius);
+      border-left: 4px solid;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      background: white;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .kpi-card.teal {
+      border-left-color: var(--accent);
+    }
+
+    .kpi-card.green {
+      border-left-color: #10b981;
+    }
+
+    .kpi-card.red {
+      border-left-color: #ef4444;
+    }
+
+    .kpi-card.blue {
+      border-left-color: #3b82f6;
+    }
+
+    .kpi-card.purple {
+      border-left-color: #8b5cf6;
+    }
+
+    .kpi-card.orange {
+      border-left-color: #f97316;
+    }
+
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .kpi-icon {
+      font-size: 36px;
+      opacity: 0.1;
+      color: var(--text-main);
+    }
+
+    .btn-primary-custom {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary-custom:hover {
+      background-color: #0d5f5f;
+      transform: translateY(-2px);
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-danger-custom {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-danger-custom:hover {
+      background-color: #dc2626;
+    }
+
+    .btn-success-custom {
+      background-color: #10b981;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-success-custom:hover {
+      background-color: #059669;
+    }
+
+    .btn-info-custom {
+      background-color: #0891b2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-info-custom:hover {
+      background-color: #0e7490;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #E0E7FF;
+      border-radius: 10px;
+      font-size: 13px;
+      background-color: #F8FAFC;
+      color: var(--text-main);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(26, 122, 122, 0.1);
+    }
+
+    .table {
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .table thead {
+      background-color: #F8FAFC;
+      border-bottom: 1px solid #E0E7FF;
+    }
+
+    .table thead th {
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      padding: 12px;
+    }
+
+    .table tbody td {
+      padding: 12px;
+      border-bottom: 1px solid #E0E7FF;
+    }
+
+    .table tbody tr:hover {
+      background-color: #F8FAFC;
+    }
+
+    .badge-type {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background-color: #E0E7FF;
+      color: var(--accent);
+    }
+
+    .badge-status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-status.approved {
+      background-color: #DCFCE7;
+      color: #166534;
+    }
+
+    .badge-status.open {
+      background-color: #DBEAFE;
+      color: #0c4a6e;
+    }
+
+    .badge-status.under-review {
+      background-color: #FEF08A;
+      color: #713f12;
+    }
+
+    .badge-status.pending {
+      background-color: #FED7AA;
+      color: #9a3412;
+    }
+
+    .badge-status.rejected {
+      background-color: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .badge-status.closed {
+      background-color: #E5E7EB;
+      color: #374151;
+    }
+
+    .badge-status.revise {
+      background-color: #FCE7F3;
+      color: #9d174d;
+    }
+
+    .badge-status.draft {
+      background-color: #F3F4F6;
+      color: #4B5563;
+    }
+
+    .badge-status.issued {
+      background-color: #DDD6FE;
+      color: #4C1D95;
+    }
+
+    .badge-status.acknowledged {
+      background-color: #DCFCE7;
+      color: #166534;
+    }
+
+    .badge-role {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: capitalize;
+      background-color: #E0E7FF;
+      color: var(--accent);
+    }
+
+    .modal-content {
+      border: none;
+      border-radius: var(--card-radius);
+    }
+
+    .modal-header {
+      background-color: #F8FAFC;
+      border-bottom: 1px solid #E0E7FF;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 280px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background-color: #DCFCE7;
+      color: #166534;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .alert-danger {
+      background-color: #FEE2E2;
+      color: #991B1B;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .alert-info {
+      background-color: #DBEAFE;
+      color: #0c4a6e;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .import-banner {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 2px solid #bbf7d0;
+      border-radius: var(--card-radius);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .import-banner h5 {
+      color: #166534;
+      margin-bottom: 16px;
+    }
+
+    .file-input-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .days-open-red {
+      color: #ef4444;
+      font-weight: 600;
+    }
+
+    .link-action {
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .link-action:hover {
+      text-decoration: underline;
+    }
+
+    .footer-text {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #E0E7FF;
+    }
+
+    .notif-card {
+      background: white;
+      border-radius: var(--card-radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .notif-message {
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .notif-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .filter-bar {
+      background: white;
+      border-radius: var(--card-radius);
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .filter-bar .form-group {
+      margin-bottom: 0;
+    }
+
+    @media print {
+      .sidebar, .top-navbar, .btn-primary-custom, .btn-danger-custom, .filter-bar, .navbar-actions {
+        display: none !important;
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 260px;
+      }
+      .main-content {
+        margin-left: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="brand-box">
+      <div class="brand-icon">DC</div>
+      <div>
+        <div class="brand-text">DCS</div>
+        <div class="brand-subtitle">Document Control</div>
+      </div>
+    </div>
+
+    <!-- Admin Navigation -->
+    <% if (user.role === 'admin') { %>
+      <div class="nav-header">OVERVIEW</div>
+      <a href="/app?page=dashboard" class="nav-link <%= page === 'dashboard' ? 'active' : '' %>">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+
+      <div class="nav-header">DOCUMENTS</div>
+      <a href="/app?page=document_register" class="nav-link <%= page === 'document_register' ? 'active' : '' %>">
+        <i class="fas fa-list"></i> Document Register
+      </a>
+      <a href="/app?page=add_document" class="nav-link <%= page === 'add_document' ? 'active' : '' %>">
+        <i class="fas fa-plus-circle"></i> Add Document
+      </a>
+      <a href="/app?page=transmittals" class="nav-link <%= page === 'transmittals' ? 'active' : '' %>">
+        <i class="fas fa-paper-plane"></i> Transmittals
+      </a>
+      <a href="/app?page=revisions" class="nav-link <%= page === 'revisions' ? 'active' : '' %>">
+        <i class="fas fa-history"></i> Revision Log
+      </a>
+
+      <div class="nav-header">USERS</div>
+      <a href="/app?page=manage_users" class="nav-link <%= page === 'manage_users' ? 'active' : '' %>">
+        <i class="fas fa-users-cog"></i> Manage Users
+      </a>
+
+      <div class="nav-header">REPORTS</div>
+      <a href="/app?page=reports" class="nav-link <%= page === 'reports' ? 'active' : '' %>">
+        <i class="fas fa-chart-bar"></i> Reports & Analytics
+      </a>
+
+      <div class="nav-header">SYSTEM</div>
+      <a href="/app?page=notifications" class="nav-link <%= page === 'notifications' ? 'active' : '' %>">
+        <i class="fas fa-bell"></i> Notifications
+      </a>
+      <a href="/app?page=feedback" class="nav-link <%= page === 'feedback' ? 'active' : '' %>">
+        <i class="fas fa-comment"></i> Feedback
+      </a>
+      <a href="/app?page=apply_leave" class="nav-link <%= page === 'apply_leave' ? 'active' : '' %>">
+        <i class="fas fa-calendar-times"></i> Apply Leave
+      </a>
+    <% } %>
+
+    <!-- Staff Navigation -->
+    <% if (user.role === 'staff') { %>
+      <div class="nav-header">OVERVIEW</div>
+      <a href="/app?page=dashboard" class="nav-link <%= page === 'dashboard' ? 'active' : '' %>">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+
+      <div class="nav-header">DOCUMENTS</div>
+      <a href="/app?page=document_register" class="nav-link <%= page === 'document_register' ? 'active' : '' %>">
+        <i class="fas fa-list"></i> Document Register
+      </a>
+      <a href="/app?page=add_document" class="nav-link <%= page === 'add_document' ? 'active' : '' %>">
+        <i class="fas fa-plus-circle"></i> Add Document
+      </a>
+      <a href="/app?page=transmittals" class="nav-link <%= page === 'transmittals' ? 'active' : '' %>">
+        <i class="fas fa-paper-plane"></i> Transmittals
+      </a>
+      <a href="/app?page=revisions" class="nav-link <%= page === 'revisions' ? 'active' : '' %>">
+        <i class="fas fa-history"></i> Revision Log
+      </a>
+
+      <div class="nav-header">REPORTS</div>
+      <a href="/app?page=reports" class="nav-link <%= page === 'reports' ? 'active' : '' %>">
+        <i class="fas fa-chart-bar"></i> Reports & Analytics
+      </a>
+
+      <div class="nav-header">REQUESTS</div>
+      <a href="/app?page=apply_leave" class="nav-link <%= page === 'apply_leave' ? 'active' : '' %>">
+        <i class="fas fa-calendar-times"></i> Apply Leave
+      </a>
+      <a href="/app?page=my_notifications" class="nav-link <%= page === 'my_notifications' ? 'active' : '' %>">
+        <i class="fas fa-bell"></i> Notifications
+      </a>
+    <% } %>
+
+    <!-- Contractor Navigation -->
+    <% if (user.role === 'contractor') { %>
+      <div class="nav-header">OVERVIEW</div>
+      <a href="/app?page=dashboard" class="nav-link <%= page === 'dashboard' ? 'active' : '' %>">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+
+      <div class="nav-header">MY DOCS</div>
+      <a href="/app?page=my_submissions" class="nav-link <%= page === 'my_submissions' ? 'active' : '' %>">
+        <i class="fas fa-folder-open"></i> My Submissions
+      </a>
+      <a href="/app?page=apply_leave" class="nav-link <%= page === 'apply_leave' ? 'active' : '' %>">
+        <i class="fas fa-calendar-times"></i> Apply Leave
+      </a>
+
+      <div class="nav-header">COMMS</div>
+      <a href="/app?page=my_notifications" class="nav-link <%= page === 'my_notifications' ? 'active' : '' %>">
+        <i class="fas fa-bell"></i> My Notifications
+      </a>
+      <a href="/app?page=feedback" class="nav-link <%= page === 'feedback' ? 'active' : '' %>">
+        <i class="fas fa-comment"></i> Feedback
+      </a>
+    <% } %>
+
+    <!-- Viewer Navigation -->
+    <% if (user.role === 'viewer') { %>
+      <div class="nav-header">OVERVIEW</div>
+      <a href="/app?page=dashboard" class="nav-link <%= page === 'dashboard' ? 'active' : '' %>">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+
+      <div class="nav-header">DOCUMENTS</div>
+      <a href="/app?page=document_register" class="nav-link <%= page === 'document_register' ? 'active' : '' %>">
+        <i class="fas fa-list"></i> Document Register
+      </a>
+
+      <div class="nav-header">COMMS</div>
+      <a href="/app?page=my_notifications" class="nav-link <%= page === 'my_notifications' ? 'active' : '' %>">
+        <i class="fas fa-bell"></i> Notifications
+      </a>
+    <% } %>
+
+    <div class="credit-text">Prepared by Israr Khan</div>
+
+    <a href="/logout" class="logout-link">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navbar -->
+    <div class="top-navbar">
+      <div>
+        <div class="navbar-title"><%= page.replace(/_/g, ' ').charAt(0).toUpperCase() + page.replace(/_/g, ' ').slice(1) %></div>
+      </div>
+      <div class="navbar-actions">
+        <input type="text" class="search-bar" placeholder="Search...">
+        <button class="icon-btn">
+          <i class="far fa-calendar"></i>
+        </button>
+        <button class="icon-btn">
+          <i class="far fa-bell"></i>
+        </button>
+        <button class="profile-btn">
+          <img src="https://ui-avatars.com/api/?name=<%= user.full_name %>&background=1a7a7a&color=fff" alt="Profile" class="profile-avatar">
+          <div class="profile-info">
+            <div class="profile-name"><%= user.full_name %></div>
+            <div class="profile-role"><%= user.role %></div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Success Alert -->
+    <% if (success_msg) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> <%= success_msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+
+    <!-- Dashboard Page -->
+    <% if (page === 'dashboard') { %>
+      <!-- Import Banner (Admin & Staff) -->
+      <% if (user.role === 'admin' || user.role === 'staff') { %>
+        <div class="import-banner">
+          <h5><i class="fas fa-file-upload"></i> Import Document Register</h5>
+          <p style="margin: 0 0 12px 0; font-size: 13px; color: #166534;">Upload a JSON file to bulk-import documents.</p>
+          <div class="file-input-wrapper">
+            <input type="file" id="jsonImport" accept=".json" style="flex: 1;">
+            <button class="btn-primary-custom" id="importBtn" style="background-color: #10b981;">
+              <i class="fas fa-upload"></i> Import
+            </button>
+          </div>
+          <div id="importResult" style="margin-top: 12px; font-size: 13px;"></div>
+        </div>
+      <% } %>
+
+      <!-- KPI Cards -->
+      <div class="row">
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card teal">
+            <div>
+              <div class="kpi-label">Total Documents</div>
+              <div class="kpi-value"><%= total_documents || 0 %></div>
+            </div>
+            <i class="fas fa-file-alt kpi-icon"></i>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card green">
+            <div>
+              <div class="kpi-label">Approved</div>
+              <div class="kpi-value"><%= approved_count || 0 %></div>
+            </div>
+            <i class="fas fa-check-circle kpi-icon"></i>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card orange">
+            <div>
+              <div class="kpi-label">Under Review</div>
+              <div class="kpi-value"><%= review_count || 0 %></div>
+            </div>
+            <i class="fas fa-search kpi-icon"></i>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card red">
+            <div>
+              <div class="kpi-label">Overdue</div>
+              <div class="kpi-value"><%= overdue_count || 0 %></div>
+            </div>
+            <i class="fas fa-exclamation-triangle kpi-icon"></i>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card blue">
+            <div>
+              <div class="kpi-label">Transmittals</div>
+              <div class="kpi-value"><%= total_transmittals || 0 %></div>
+            </div>
+            <i class="fas fa-paper-plane kpi-icon"></i>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card purple">
+            <div>
+              <div class="kpi-label">Approval Rate</div>
+              <div class="kpi-value"><%= approval_rate || 0 %>%</div>
+            </div>
+            <i class="fas fa-chart-pie kpi-icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card" style="padding: 20px;">
+            <h5>Document Status Distribution</h5>
+            <div class="chart-container">
+              <canvas id="statusChart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card" style="padding: 20px;">
+            <h5>By Document Type</h5>
+            <div class="chart-container">
+              <canvas id="typeChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Documents -->
+      <div class="card" style="margin-top: 20px; padding: 20px;">
+        <h5>Recent Documents</h5>
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Doc Number</th>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Days Open</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (recent_docs && recent_docs.length > 0) { %>
+                <% recent_docs.forEach(doc => { %>
+                  <tr style="cursor: pointer;" onclick="window.location.href='/app?page=edit_document&id=<%= doc._id %>'">
+                    <td><strong><%= doc.doc_number %></strong></td>
+                    <td><span class="badge-type"><%= doc.type %></span></td>
+                    <td><%= doc.title.substring(0, 40) %>...</td>
+                    <td><span class="badge-status <%= doc.status.toLowerCase().replace(/ /g, '-').replace(/&/g, 'and') %>"><%= doc.status %></span></td>
+                    <td><%= doc.days_open > 14 ? '<span class="days-open-red">' + doc.days_open + '</span>' : doc.days_open %></td>
+                    <td><%= new Date(doc.updated_at).toLocaleDateString() %></td>
+                  </tr>
+                <% }); %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <script>
+        fetch('/api/stats')
+          .then(r => r.json())
+          .then(data => {
+            const statusColors = {
+              'Approved': '#10b981',
+              'Under Review': '#f59e0b',
+              'Open': '#3b82f6',
+              'Pending': '#f97316',
+              'Rejected': '#ef4444',
+              'Closed': '#9ca3af',
+              'Revise & Resubmit': '#ec4899'
+            };
+
+            new Chart(document.getElementById('statusChart'), {
+              type: 'doughnut',
+              data: {
+                labels: Object.keys(data.by_status),
+                datasets: [{
+                  data: Object.values(data.by_status),
+                  backgroundColor: Object.keys(data.by_status).map(k => statusColors[k] || '#999')
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+              }
+            });
+
+            new Chart(document.getElementById('typeChart'), {
+              type: 'bar',
+              data: {
+                labels: Object.keys(data.by_type),
+                datasets: [{
+                  label: 'Count',
+                  data: Object.values(data.by_type),
+                  backgroundColor: '#1a7a7a'
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+              }
+            });
+          });
+      </script>
+    <% } %>
+
+    <!-- Document Register -->
+    <% if (page === 'document_register') { %>
+      <div class="filter-bar">
+        <form method="GET" action="/app" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+          <input type="hidden" name="page" value="document_register">
+          <div style="flex: 1; min-width: 150px;">
+            <label>Type</label>
+            <select name="type" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #E0E7FF;">
+              <option value="">All Types</option>
+              <% doc_types.forEach(t => { %>
+                <option value="<%= t %>" <%= filters && filters.type === t ? 'selected' : '' %>><%= t %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div style="flex: 1; min-width: 150px;">
+            <label>Discipline</label>
+            <select name="discipline" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #E0E7FF;">
+              <option value="">All Disciplines</option>
+              <% disciplines.forEach(d => { %>
+                <option value="<%= d %>" <%= filters && filters.discipline === d ? 'selected' : '' %>><%= d %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div style="flex: 1; min-width: 150px;">
+            <label>Status</label>
+            <select name="status" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #E0E7FF;">
+              <option value="">All Statuses</option>
+              <% statuses.forEach(s => { %>
+                <option value="<%= s %>" <%= filters && filters.status === s ? 'selected' : '' %>><%= s %></option>
+              <% }); %>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary-custom">
+            <i class="fas fa-filter"></i> Filter
+          </button>
+          <a href="/app?page=document_register" class="btn-primary-custom" style="background-color: #9ca3af;">
+            Reset
+          </a>
+          <a href="/app?page=add_document" class="btn-primary-custom">
+            <i class="fas fa-plus"></i> Add Document
+          </a>
+        </form>
+      </div>
+
+      <div class="card" style="padding: 20px;">
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Doc Number</th>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Rev</th>
+                <th>Status</th>
+                <th>Discipline</th>
+                <th>Contractor</th>
+                <th>Due Date</th>
+                <th>Days Open</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (documents && documents.length > 0) { %>
+                <% documents.forEach((doc, idx) => { %>
+                  <tr>
+                    <td><%= idx + 1 %></td>
+                    <td><strong><%= doc.doc_number %></strong></td>
+                    <td><span class="badge-type"><%= doc.type %></span></td>
+                    <td><%= doc.title.substring(0, 30) %>...</td>
+                    <td><%= doc.rev %></td>
+                    <td><span class="badge-status <%= doc.status.toLowerCase().replace(/ /g, '-').replace(/&/g, 'and') %>"><%= doc.status %></span></td>
+                    <td><%= doc.discipline || 'N/A' %></td>
+                    <td><%= doc.contractor || 'N/A' %></td>
+                    <td><%= doc.due_date ? new Date(doc.due_date).toLocaleDateString() : 'N/A' %></td>
+                    <td><%= doc.days_open > 14 ? '<span class="days-open-red">' + doc.days_open + '</span>' : doc.days_open %></td>
+                    <td>
+                      <a href="/app?page=edit_document&id=<%= doc._id %>" class="link-action" title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <a href="/app?page=document_register&delete=true&table=documents&id=<%= doc._id %>" class="link-action" style="color: #ef4444; margin-left: 8px;" title="Delete" onclick="return confirm('Delete this document?');">
+                        <i class="fas fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr><td colspan="11" style="text-align: center; padding: 20px; color: #9ca3af;">No documents found.</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Add/Edit Document -->
+    <% if (page === 'add_document' || page === 'edit_document') { %>
+      <div class="card" style="padding: 24px;">
+        <h5 style="margin-bottom: 20px;">
+          <%= page === 'add_document' ? 'Add New Document' : 'Edit Document' %>
+        </h5>
+        <form method="POST" action="/app">
+          <input type="hidden" name="action" value="<%= page === 'add_document' ? 'add_document' : 'update_document' %>">
+          <% if (page === 'edit_document' && doc) { %>
+            <input type="hidden" name="id" value="<%= doc._id %>">
+          <% } %>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Doc Number</label>
+                <input type="text" name="doc_number" placeholder="Auto-generated if blank" value="<%= doc ? doc.doc_number : '' %>">
+              </div>
+
+              <div class="form-group">
+                <label>Type (e.g., WIR, RFI, NCR)</label>
+                <input type="text" name="type" placeholder="e.g., WIR" value="<%= doc ? doc.type : '' %>" required>
+              </div>
+
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Document title" value="<%= doc ? doc.title : '' %>" required>
+              </div>
+
+              <div class="form-group">
+                <label>Revision</label>
+                <input type="text" name="rev" placeholder="A" value="<%= doc ? doc.rev : 'A' %>">
+              </div>
+
+              <div class="form-group">
+                <label>Discipline (e.g., ARCH, CIVIL, STR)</label>
+                <input type="text" name="discipline" placeholder="e.g., STR" value="<%= doc ? doc.discipline : '' %>">
+              </div>
+
+              <div class="form-group">
+                <label>Area</label>
+                <input type="text" name="area" placeholder="e.g., Zone A - Block 1" value="<%= doc ? doc.area : '' %>">
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Status</label>
+                <select name="status" required>
+                  <% statuses.forEach(s => { %>
+                    <option value="<%= s %>" <%= doc && doc.status === s ? 'selected' : '' %>><%= s %></option>
+                  <% }); %>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Contractor</label>
+                <input type="text" name="contractor" placeholder="Contractor name" value="<%= doc ? doc.contractor : '' %>">
+              </div>
+
+              <div class="form-group">
+                <label>Submitted By</label>
+                <input type="text" name="submitted_by" placeholder="Person name" value="<%= doc ? doc.submitted_by : '' %>">
+              </div>
+
+              <div class="form-group">
+                <label>Issue Date</label>
+                <input type="date" name="issue_date" value="<%= doc && doc.issue_date ? doc.issue_date.toISOString().split('T')[0] : '' %>">
+              </div>
+
+              <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" name="due_date" value="<%= doc && doc.due_date ? doc.due_date.toISOString().split('T')[0] : '' %>">
+              </div>
+
+              <div class="form-group">
+                <label>Response Date</label>
+                <input type="date" name="response_date" value="<%= doc && doc.response_date ? doc.response_date.toISOString().split('T')[0] : '' %>">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Remarks</label>
+            <textarea name="remarks" rows="3" placeholder="Any additional remarks..."><%= doc ? doc.remarks : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Attachments</label>
+            <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.dwg,.zip">
+            <input type="hidden" name="attachments" id="attachmentsInput" value="<%= doc && doc.attachments ? doc.attachments.join(',') : '' %>">
+            <div id="attachmentsList" style="margin-top: 12px; font-size: 13px;">
+              <% if (doc && doc.attachments && doc.attachments.length > 0) { %>
+                <% doc.attachments.forEach(file => { %>
+                  <div style="padding: 8px; background: #F8FAFC; border-radius: 6px; margin-bottom: 8px;">
+                    <a href="/uploads/<%= file %>" target="_blank"><%= file %></a>
+                  </div>
+                <% }); %>
+              <% } %>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px;">
+            <button type="submit" class="btn-primary-custom">
+              <i class="fas fa-save"></i> Save Document
+            </button>
+            <a href="/app?page=document_register" class="btn-primary-custom" style="background-color: #9ca3af;">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <script>
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+          const files = e.target.files;
+          const attachmentsList = document.getElementById('attachmentsList');
+          const attachmentsInput = document.getElementById('attachmentsInput');
+          let filenames = attachmentsInput.value ? attachmentsInput.value.split(',').filter(x => x) : [];
+
+          for (const file of files) {
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('/upload-file', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.filename) {
+              filenames.push(data.filename);
+              attachmentsList.innerHTML += `
+                <div style="padding: 8px; background: #F8FAFC; border-radius: 6px; margin-bottom: 8px;">
+                  <a href="/uploads/${data.filename}" target="_blank">${data.filename}</a>
+                </div>
+              `;
+            }
+          }
+          attachmentsInput.value = filenames.join(',');
+        });
+      </script>
+    <% } %>
+
+    <!-- Transmittals -->
+    <% if (page === 'transmittals') { %>
+      <div style="margin-bottom: 20px;">
+        <a href="/app?page=create_transmittal" class="btn-primary-custom">
+          <i class="fas fa-plus"></i> Create Transmittal
+        </a>
+      </div>
+
+      <div class="card" style="padding: 20px;">
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Transmittal No</th>
+                <th>Title</th>
+                <th>Issued To</th>
+                <th>Issued By</th>
+                <th>Documents</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (transmittals && transmittals.length > 0) { %>
+                <% transmittals.forEach(t => { %>
+                  <tr>
+                    <td><strong><%= t.transmittal_no %></strong></td>
+                    <td><%= t.title || 'N/A' %></td>
+                    <td><%= t.issued_to || 'N/A' %></td>
+                    <td><%= t.issued_by && t.issued_by.full_name ? t.issued_by.full_name : 'N/A' %></td>
+                    <td><%= t.documents ? t.documents.length : 0 %></td>
+                    <td><span class="badge-status <%= t.status.toLowerCase() %>"><%= t.status %></span></td>
+                    <td><%= new Date(t.created_at).toLocaleDateString() %></td>
+                    <td>
+                      <% if (t.status === 'Draft') { %>
+                        <form method="POST" action="/app" style="display: inline;">
+                          <input type="hidden" name="action" value="issue_transmittal">
+                          <input type="hidden" name="id" value="<%= t._id %>">
+                          <button type="submit" class="btn-info-custom">Issue</button>
+                        </form>
+                      <% } else if (t.status === 'Issued') { %>
+                        <form method="POST" action="/app" style="display: inline;">
+                          <input type="hidden" name="action" value="acknowledge_transmittal">
+                          <input type="hidden" name="id" value="<%= t._id %>">
+                          <button type="submit" class="btn-success-custom">Acknowledge</button>
+                        </form>
+                      <% } %>
+                      <a href="/app?page=transmittals&delete=true&table=transmittals&id=<%= t._id %>" class="btn-danger-custom" style="margin-left: 4px;" onclick="return confirm('Delete this transmittal?');">
+                        <i class="fas fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr><td colspan="8" style="text-align: center; padding: 20px; color: #9ca3af;">No transmittals found.</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Create Transmittal -->
+    <% if (page === 'create_transmittal') { %>
+      <div class="card" style="padding: 24px;">
+        <h5 style="margin-bottom: 20px;">Create Transmittal</h5>
+        <form method="POST" action="/app">
+          <input type="hidden" name="action" value="create_transmittal">
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Transmittal title" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Issued To</label>
+                <input type="text" name="issued_to" placeholder="Recipient name/company" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Remarks</label>
+            <textarea name="remarks" rows="3" placeholder="Any remarks..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Select Documents</label>
+            <div style="max-height: 300px; overflow-y: auto; border: 1px solid #E0E7FF; border-radius: 10px; padding: 12px;">
+              <% if (documents && documents.length > 0) { %>
+                <% documents.forEach(doc => { %>
+                  <div style="padding: 8px; margin-bottom: 8px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin: 0;">
+                      <input type="checkbox" name="document_ids" value="<%= doc._id %>">
+                      <strong><%= doc.doc_number %></strong> - <%= doc.title.substring(0, 40) %>
+                    </label>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <p style="color: #9ca3af; margin: 0;">No available documents.</p>
+              <% } %>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px;">
+            <button type="submit" class="btn-primary-custom">
+              <i class="fas fa-save"></i> Create Transmittal
+            </button>
+            <a href="/app?page=transmittals" class="btn-primary-custom" style="background-color: #9ca3af;">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    <% } %>
+
+    <!-- Revisions -->
+    <% if (page === 'revisions') { %>
+      <div class="card" style="padding: 20px;">
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Doc Number</th>
+                <th>Type</th>
+                <th>Rev</th>
+                <th>Change Note</th>
+                <th>Changed By</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (revisions && revisions.length > 0) { %>
+                <% revisions.forEach(rev => { %>
+                  <tr>
+                    <td><strong><%= rev.document_id && rev.document_id.doc_number ? rev.document_id.doc_number : 'N/A' %></strong></td>
+                    <td><span class="badge-type"><%= rev.document_id && rev.document_id.type ? rev.document_id.type : 'N/A' %></span></td>
+                    <td><%= rev.rev %></td>
+                    <td><%= rev.change_note || 'N/A' %></td>
+                    <td><%= rev.changed_by && rev.changed_by.full_name ? rev.changed_by.full_name : 'System' %></td>
+                    <td><%= new Date(rev.changed_at).toLocaleDateString() %></td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr><td colspan="6" style="text-align: center; padding: 20px; color: #9ca3af;">No revisions found.</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Manage Users (Admin) -->
+    <% if (page === 'manage_users' && user.role === 'admin') { %>
+      <div style="margin-bottom: 20px;">
+        <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">
+          <i class="fas fa-plus"></i> Add User
+        </button>
+      </div>
+
+      <div class="card" style="padding: 20px;">
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Company</th>
+                <th>Phone</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (users && users.length > 0) { %>
+                <% users.forEach(u => { %>
+                  <tr>
+                    <td><strong><%= u.full_name %></strong></td>
+                    <td><%= u.email %></td>
+                    <td><span class="badge-role"><%= u.role %></span></td>
+                    <td><%= u.company || 'N/A' %></td>
+                    <td><%= u.phone || 'N/A' %></td>
+                    <td><%= new Date(u.created_at).toLocaleDateString() %></td>
+                    <td>
+                      <% if (u._id.toString() !== user._id.toString()) { %>
+                        <a href="/app?page=manage_users&delete=true&table=users&id=<%= u._id %>" class="btn-danger-custom" onclick="return confirm('Delete this user?');">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr><td colspan="7" style="text-align: center; padding: 20px; color: #9ca3af;">No users found.</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Add User Modal -->
+      <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add New User</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="/app">
+              <div class="modal-body">
+                <input type="hidden" name="action" value="add_user">
+
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" name="full_name" required>
+                </div>
+
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password" name="password" placeholder="Default: 123456">
+                </div>
+
+                <div class="form-group">
+                  <label>Role</label>
+                  <select name="role" required>
+                    <option value="admin">Admin</option>
+                    <option value="staff">Staff (Document Controller)</option>
+                    <option value="contractor">Contractor</option>
+                    <option value="viewer">Viewer</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Company</label>
+                  <input type="text" name="company" placeholder="e.g., XYZ Contractors Ltd">
+                </div>
+
+                <div class="form-group">
+                  <label>Phone</label>
+                  <input type="text" name="phone">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-primary-custom">Add User</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Reports -->
+    <% if (page === 'reports') { %>
+      <div style="margin-bottom: 12px;">
+        <button class="btn-primary-custom" onclick="window.print()">
+          <i class="fas fa-print"></i> Print
+        </button>
+        <button class="btn-primary-custom" style="background-color: #9ca3af; margin-left: 4px;" onclick="exportCSV()">
+          <i class="fas fa-download"></i> Export CSV
+        </button>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="row">
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card teal">
+            <div>
+              <div class="kpi-label">Total Documents</div>
+              <div class="kpi-value"><%= total_documents || 0 %></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card green">
+            <div>
+              <div class="kpi-label">Approved</div>
+              <div class="kpi-value"><%= approved_count || 0 %></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card orange">
+            <div>
+              <div class="kpi-label">Approval Rate</div>
+              <div class="kpi-value"><%= approval_rate || 0 %>%</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card red">
+            <div>
+              <div class="kpi-label">Overdue</div>
+              <div class="kpi-value"><%= overdue_count || 0 %></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card blue">
+            <div>
+              <div class="kpi-label">Under Review</div>
+              <div class="kpi-value"><%= review_count || 0 %></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="kpi-card purple">
+            <div>
+              <div class="kpi-label">Transmittals</div>
+              <div class="kpi-value"><%= total_transmittals || 0 %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overdue Documents -->
+      <div class="card" style="margin-top: 20px; padding: 20px;">
+        <h5>Overdue Documents</h5>
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Doc Number</th>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Contractor</th>
+                <th>Due Date</th>
+                <th>Days Overdue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (overdue_docs && overdue_docs.length > 0) { %>
+                <% overdue_docs.forEach(doc => { %>
+                  <tr>
+                    <td><strong><%= doc.doc_number %></strong></td>
+                    <td><span class="badge-type"><%= doc.type %></span></td>
+                    <td><%= doc.title.substring(0, 30) %>...</td>
+                    <td><%= doc.contractor || 'N/A' %></td>
+                    <td><%= doc.due_date ? new Date(doc.due_date).toLocaleDateString() : 'N/A' %></td>
+                    <td><span class="days-open-red"><%= doc.days_open %></span></td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr><td colspan="6" style="text-align: center; padding: 20px; color: #9ca3af;">No overdue documents.</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <script>
+        function exportCSV() {
+          const table = document.querySelector('table');
+          let csv = [];
+          const rows = table.querySelectorAll('tr');
+          rows.forEach(row => {
+            const cols = row.querySelectorAll('td, th');
+            const csvRow = Array.from(cols).map(col => '"' + col.innerText.replace(/"/g, '""') + '"').join(',');
+            csv.push(csvRow);
+          });
+          const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+          const link = document.createElement('a');
+          link.setAttribute('href', encodeURI(csvContent));
+          link.setAttribute('download', 'Reports_' + new Date().toISOString().split('T')[0] + '.csv');
+          link.click();
+        }
+      </script>
+    <% } %>
+
+    <!-- Notifications (Admin) -->
+    <% if (page === 'notifications' && user.role === 'admin') { %>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card" style="padding: 20px; margin-bottom: 20px;">
+            <h5>Send Notification</h5>
+            <form method="POST" action="/app">
+              <input type="hidden" name="action" value="send_notification">
+
+              <div class="form-group">
+                <label>Audience</label>
+                <select name="type" required>
+                  <option value="all">All Users</option>
+                  <option value="admin">Admin</option>
+                  <option value="staff">Staff</option>
+                  <option value="contractor">Contractor</option>
+                  <option value="viewer">Viewer</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Message</label>
+                <textarea name="message" rows="3" required></textarea>
+              </div>
+
+              <button type="submit" class="btn-primary-custom">
+                <i class="fas fa-paper-plane"></i> Send
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 20px; margin-bottom: 20px;">
+        <h5>Leave/Absence Requests</h5>
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Date</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (leaves && leaves.length > 0) { %>
+                <% leaves.forEach(leave => { %>
+                  <tr>
+                    <td><strong><%= leave.user_id && leave.user_id.full_name ? leave.user_id.full_name : 'N/A' %></strong></td>
+                    <td><span class="badge-role"><%= leave.role %></span></td>
+                    <td><%= leave.date %></td>
+                    <td><%= leave.message.substring(0, 30) %>...</td>
+                    <td><span class="badge-status <%= leave.status.toLowerCase() %>"><%= leave.status %></span></td>
+                    <td>
+                      <% if (leave.status === 'Pending') { %>
+                        <form method="POST" action="/app" style="display: flex; gap: 4px;">
+                          <input type="hidden" name="action" value="update_leave">
+                          <input type="hidden" name="leave_id" value="<%= leave._id %>">
+                          <input type="hidden" name="status" value="Approved">
+                          <button type="submit" class="btn-success-custom">Approve</button>
+                        </form>
+                        <form method="POST" action="/app" style="display: inline;">
+                          <input type="hidden" name="action" value="update_leave">
+                          <input type="hidden" name="leave_id" value="<%= leave._id %>">
+                          <input type="hidden" name="status" value="Declined">
+                          <button type="submit" class="btn-danger-custom">Decline</button>
+                        </form>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr><td colspan="6" style="text-align: center; padding: 20px; color: #9ca3af;">No leave requests.</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 20px;">
+        <h5>All Notifications</h5>
+        <% if (notifications && notifications.length > 0) { %>
+          <% notifications.forEach(notif => { %>
+            <div class="notif-card">
+              <div class="notif-message"><%= notif.message %></div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="notif-time"><%= new Date(notif.created_at).toLocaleDateString() %></div>
+                <a href="/app?page=notifications&delete=true&table=notifications&id=<%= notif._id %>" class="btn-danger-custom">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p style="color: #9ca3af;">No notifications.</p>
+        <% } %>
+      </div>
+    <% } %>
+
+    <!-- My Notifications -->
+    <% if (page === 'my_notifications') { %>
+      <% if (notifs && notifs.length > 0) { %>
+        <% notifs.forEach(notif => { %>
+          <div class="notif-card">
+            <i class="fas fa-bell" style="color: var(--accent); margin-right: 12px;"></i>
+            <div class="notif-message"><%= notif.message %></div>
+            <div class="notif-time"><%= new Date(notif.created_at).toLocaleDateString() %></div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i> No notifications for you.
+        </div>
+      <% } %>
+    <% } %>
+
+    <!-- Apply Leave -->
+    <% if (page === 'apply_leave') { %>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card" style="padding: 20px;">
+            <h5>Apply for Leave</h5>
+            <form method="POST" action="/app">
+              <input type="hidden" name="action" value="apply_leave">
+
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" name="date" required>
+              </div>
+
+              <div class="form-group">
+                <label>Reason</label>
+                <textarea name="message" rows="4" required></textarea>
+              </div>
+
+              <button type="submit" class="btn-primary-custom">
+                <i class="fas fa-check"></i> Submit Request
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card" style="padding: 20px;">
+            <h5>My Leave History</h5>
+            <% if (my_leaves && my_leaves.length > 0) { %>
+              <% my_leaves.forEach(leave => { %>
+                <div style="padding: 12px; background: #F8FAFC; border-radius: 10px; margin-bottom: 12px;">
+                  <div style="display: flex; justify-content: space-between;">
+                    <div>
+                      <div style="font-weight: 600;"><%= leave.date %></div>
+                      <div style="font-size: 12px; color: #9ca3af;"><%= leave.message.substring(0, 40) %>...</div>
+                    </div>
+                    <span class="badge-status <%= leave.status.toLowerCase() %>"><%= leave.status %></span>
+                  </div>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <p style="color: #9ca3af;">No leave requests.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Feedback -->
+    <% if (page === 'feedback') { %>
+      <% if (user.role === 'admin' || user.role === 'staff') { %>
+        <!-- View Feedback -->
+        <div class="card" style="padding: 20px;">
+          <h5>All Feedback</h5>
+          <div style="overflow-x: auto;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Message</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (feedbacks && feedbacks.length > 0) { %>
+                  <% feedbacks.forEach(fb => { %>
+                    <tr>
+                      <td><strong><%= fb.user_id && fb.user_id.full_name ? fb.user_id.full_name : 'Anonymous' %></strong></td>
+                      <td><span class="badge-role"><%= fb.user_id && fb.user_id.role ? fb.user_id.role : 'N/A' %></span></td>
+                      <td><%= fb.message.substring(0, 50) %>...</td>
+                      <td><%= new Date(fb.created_at).toLocaleDateString() %></td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr><td colspan="4" style="text-align: center; padding: 20px; color: #9ca3af;">No feedback received.</td></tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% } else { %>
+        <!-- Send Feedback -->
+        <div class="card" style="padding: 24px; max-width: 600px;">
+          <h5>Send Feedback</h5>
+          <form method="POST" action="/app">
+            <input type="hidden" name="action" value="send_feedback">
+
+            <div class="form-group">
+              <label>Your Feedback</label>
+              <textarea name="message" rows="5" placeholder="Share your thoughts, suggestions, or concerns..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary-custom">
+              <i class="fas fa-paper-plane"></i> Submit Feedback
+            </button>
+          </form>
+        </div>
+      <% } %>
+    <% } %>
+
+    <!-- My Submissions (Contractor) -->
+    <% if (page === 'my_submissions' && user.role === 'contractor') { %>
+      <div class="card" style="padding: 20px;">
+        <div style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Doc Number</th>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Response Due</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (documents && documents.length > 0) { %>
+                <% documents.forEach(doc => { %>
+                  <tr>
+                    <td><strong><%= doc.doc_number %></strong></td>
+                    <td><span class="badge-type"><%= doc.type %></span></td>
+                    <td><%= doc.title.substring(0, 40) %>...</td>
+                    <td><span class="badge-status <%= doc.status.toLowerCase().replace(/ /g, '-').replace(/&/g, 'and') %>"><%= doc.status %></span></td>
+                    <td><%= doc.issue_date ? new Date(doc.issue_date).toLocaleDateString() : 'N/A' %></td>
+                    <td><%= doc.due_date ? new Date(doc.due_date).toLocaleDateString() : 'N/A' %></td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr><td colspan="6" style="text-align: center; padding: 20px; color: #9ca3af;">No submissions found.</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="footer-text">
+      © 2025 Document Control System · Prepared by Israr Khan — Sr. Document Controller
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('importBtn')?.addEventListener('click', async () => {
+      const fileInput = document.getElementById('jsonImport');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('Please select a JSON file');
+        return;
+      }
+
+      const text = await file.text();
+      const data = JSON.parse(text);
+
+      const res = await fetch('/import-json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data })
+      });
+
+      const result = await res.json();
+      const msg = `✅ Imported ${result.imported} documents, ${result.skipped} skipped${result.errors.length > 0 ? ', ' + result.errors.length + ' errors' : ''}`;
+      document.getElementById('importResult').textContent = msg;
+      setTimeout(() => location.reload(), 1500);
+    });
+  </script>
+</body>
+</html>
